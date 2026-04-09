@@ -1,0 +1,1486 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Touhid AI</title>
+  <style>
+    :root {
+      --bg: #07111f;
+      --bg2: #0a1730;
+      --panel: rgba(12, 25, 45, 0.88);
+      --panel-2: rgba(18, 35, 61, 0.92);
+      --line: rgba(255,255,255,0.09);
+      --text: #edf4ff;
+      --muted: #9db2cf;
+      --accent: #5ea0ff;
+      --accent-2: #7f5cff;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ff5f7d;
+      --shadow: 0 20px 50px rgba(0,0,0,.35);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(94,160,255,.22), transparent 28%),
+        radial-gradient(circle at top right, rgba(127,92,255,.18), transparent 28%),
+        linear-gradient(160deg, #030814, #0a1730 45%, #07111f 100%);
+    }
+
+    body { min-height: 100vh; }
+
+    .app {
+      width: 100%;
+      max-width: 520px;
+      margin: 0 auto;
+      min-height: 100vh;
+      padding: 16px 14px 24px;
+    }
+
+    .glass {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      border-radius: 22px;
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .brand {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .logo {
+      width: 46px;
+      height: 46px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 18px;
+      box-shadow: 0 10px 26px rgba(94,160,255,.35);
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.1;
+    }
+
+    .brand p {
+      margin: 4px 0 0;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .badge {
+      font-size: 11px;
+      color: #dbe8ff;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.11);
+      background: rgba(255,255,255,.05);
+      white-space: nowrap;
+    }
+
+    .hero {
+      border-radius: 28px;
+      padding: 20px;
+      margin-bottom: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto -10% -30% auto;
+      width: 180px;
+      height: 180px;
+      background: radial-gradient(circle, rgba(94,160,255,.30), transparent 65%);
+      pointer-events: none;
+    }
+
+    .hero h2 {
+      margin: 0 0 10px;
+      font-size: 28px;
+      line-height: 1.15;
+    }
+
+    .hero p {
+      margin: 0;
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.65;
+      max-width: 95%;
+    }
+
+    .credit {
+      margin-top: 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.09);
+      font-size: 12px;
+      color: #dce8ff;
+      font-weight: 700;
+    }
+
+    .hero-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.09);
+      font-size: 11px;
+      color: #dce8ff;
+      font-weight: 700;
+    }
+
+    .hero-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .card {
+      border-radius: 22px;
+      padding: 16px;
+      min-height: 120px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, rgba(94,160,255,.22), rgba(127,92,255,.18));
+      border: 1px solid rgba(255,255,255,.08);
+      font-size: 18px;
+    }
+
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+
+    .card p {
+      margin: 0;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .section {
+      border-radius: 24px;
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      gap: 10px;
+    }
+
+    .section-title h3 {
+      margin: 0;
+      font-size: 17px;
+    }
+
+    .section-title span {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .tab-btn {
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.04);
+      color: #dfe9ff;
+      border-radius: 14px;
+      padding: 10px 8px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, rgba(94,160,255,.30), rgba(127,92,255,.24));
+      box-shadow: 0 10px 24px rgba(94,160,255,.18);
+    }
+
+    .panel {
+      display: none;
+      animation: fade .25s ease;
+    }
+
+    .panel.active {
+      display: block;
+    }
+
+    @keyframes fade {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .upload-box {
+      border: 1.5px dashed rgba(255,255,255,.14);
+      background: rgba(255,255,255,.03);
+      border-radius: 18px;
+      padding: 18px;
+      text-align: center;
+    }
+
+    .upload-box p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .preview {
+      margin-top: 14px;
+      display: none;
+      gap: 12px;
+      align-items: center;
+      padding: 12px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.07);
+    }
+
+    .preview.active {
+      display: flex;
+    }
+
+    .preview img {
+      width: 86px;
+      height: 86px;
+      object-fit: cover;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.08);
+    }
+
+    .preview .meta {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .preview .meta h4,
+    .result h4,
+    .config h4,
+    .status h4,
+    .quick-box h4 {
+      margin: 0 0 8px;
+      font-size: 14px;
+    }
+
+    .preview .meta p,
+    .result p,
+    .config p,
+    .status p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+      word-break: break-word;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .field label {
+      font-size: 12px;
+      color: #dbe7ff;
+      font-weight: 700;
+    }
+
+    input[type="text"],
+    input[type="url"],
+    textarea,
+    select {
+      width: 100%;
+      border: 1px solid rgba(255,255,255,.08);
+      outline: none;
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      border-radius: 16px;
+      padding: 13px 14px;
+      font-size: 14px;
+      resize: vertical;
+    }
+
+    textarea {
+      min-height: 102px;
+      font-family: inherit;
+    }
+
+    input::placeholder, textarea::placeholder {
+      color: #89a0c0;
+    }
+
+    .actions,
+    .toolbar {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .actions.two {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    button,
+    .file-label {
+      border: 1px solid rgba(255,255,255,.08);
+      cursor: pointer;
+      border-radius: 16px;
+      padding: 12px;
+      color: white;
+      background: linear-gradient(135deg, rgba(94,160,255,.28), rgba(127,92,255,.22));
+      font-weight: 700;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    .file-label.secondary,
+    .ghost {
+      background: rgba(255,255,255,.04);
+      color: #e7efff;
+    }
+
+    .warn {
+      background: linear-gradient(135deg, rgba(245,158,11,.30), rgba(255,95,125,.18));
+    }
+
+    .success {
+      background: linear-gradient(135deg, rgba(34,197,94,.30), rgba(94,160,255,.16));
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .result,
+    .status,
+    .config,
+    .quick-box {
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.07);
+      margin-top: 12px;
+    }
+
+    .result textarea {
+      min-height: 140px;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .kpi {
+      border-radius: 18px;
+      padding: 14px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.07);
+    }
+
+    .kpi b {
+      display: block;
+      font-size: 22px;
+      margin-bottom: 6px;
+    }
+
+    .kpi span {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .footer-note {
+      text-align: center;
+      font-size: 11px;
+      color: var(--muted);
+      margin: 12px 0 0;
+      line-height: 1.6;
+    }
+
+    .pulse {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: #dce8ff;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--success);
+      box-shadow: 0 0 0 0 rgba(34,197,94,.6);
+      animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(34,197,94,.55); }
+      70% { box-shadow: 0 0 0 10px rgba(34,197,94,0); }
+      100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); }
+    }
+
+    /* Separate AI Chat */
+    .chat-section {
+      margin-bottom: 14px;
+    }
+
+    .chat-shell {
+      border-radius: 28px;
+      background: linear-gradient(180deg, rgba(10,20,38,.96), rgba(8,18,34,.98));
+      border: 1px solid rgba(255,255,255,.08);
+      overflow: hidden;
+      min-height: 76vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 25px 60px rgba(0,0,0,.35);
+    }
+
+    .chat-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px;
+      border-bottom: 1px solid rgba(255,255,255,.07);
+      background: rgba(255,255,255,.025);
+    }
+
+    .chat-head-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .chat-ai-logo {
+      width: 46px;
+      height: 46px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      background: linear-gradient(135deg, #4f9cff, #7f5cff);
+      box-shadow: 0 12px 28px rgba(94,160,255,.24);
+    }
+
+    .chat-head h3 {
+      margin: 0;
+      font-size: 17px;
+    }
+
+    .chat-head p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .chat-head-badge {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(34,197,94,.12);
+      border: 1px solid rgba(34,197,94,.24);
+      color: #dfffea;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .chat-suggestions {
+      display: flex;
+      gap: 10px;
+      padding: 14px 16px 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .chat-suggestions::-webkit-scrollbar,
+    .chat-tools::-webkit-scrollbar {
+      display: none;
+    }
+
+    .chat-suggestions button,
+    .chat-tools button {
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.045);
+      color: #eef4ff;
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-size: 12px;
+      white-space: nowrap;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .chat-window {
+      flex: 1;
+      padding: 18px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      overflow-y: auto;
+      min-height: 460px;
+      scroll-behavior: smooth;
+    }
+
+    .welcome-wrap {
+      text-align: center;
+      padding: 20px 18px 6px;
+    }
+
+    .welcome-icon {
+      width: 62px;
+      height: 62px;
+      margin: 0 auto 12px;
+      border-radius: 20px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, rgba(94,160,255,.24), rgba(127,92,255,.22));
+      font-size: 26px;
+    }
+
+    .welcome-wrap h4 {
+      margin: 0 0 8px;
+      font-size: 22px;
+    }
+
+    .welcome-wrap p {
+      margin: 0 auto;
+      max-width: 320px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .msg-row {
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+    }
+
+    .ai-row {
+      justify-content: flex-start;
+    }
+
+    .user-row {
+      justify-content: flex-end;
+    }
+
+    .bubble-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      font-size: 12px;
+      font-weight: 800;
+      background: linear-gradient(135deg, rgba(94,160,255,.24), rgba(127,92,255,.20));
+      border: 1px solid rgba(255,255,255,.08);
+      flex-shrink: 0;
+    }
+
+    .user-row .bubble-icon {
+      display: none;
+    }
+
+    .msg {
+      max-width: 85%;
+      padding: 14px 15px;
+      border-radius: 20px;
+      line-height: 1.7;
+      font-size: 14px;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .msg.ai {
+      background: rgba(255,255,255,.045);
+      border: 1px solid rgba(255,255,255,.08);
+      border-top-left-radius: 8px;
+    }
+
+    .msg.user {
+      background: linear-gradient(135deg, rgba(94,160,255,.30), rgba(127,92,255,.24));
+      border: 1px solid rgba(255,255,255,.08);
+      border-top-right-radius: 8px;
+      margin-left: auto;
+    }
+
+    .typing {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 2px;
+    }
+
+    .typing span {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #d5e3ff;
+      opacity: 0.55;
+      animation: blink 1.2s infinite ease-in-out;
+    }
+
+    .typing span:nth-child(2) { animation-delay: .2s; }
+    .typing span:nth-child(3) { animation-delay: .4s; }
+
+    @keyframes blink {
+      0%, 80%, 100% { transform: translateY(0); opacity: .35; }
+      40% { transform: translateY(-3px); opacity: 1; }
+    }
+
+    .chat-bottom {
+      padding: 14px 16px 16px;
+      border-top: 1px solid rgba(255,255,255,.07);
+      background: rgba(7,14,25,.88);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      bottom: 0;
+    }
+
+    .chat-tools {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      margin-bottom: 12px;
+      scrollbar-width: none;
+    }
+
+    .modern-composer {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      border-radius: 22px;
+      background: rgba(255,255,255,.045);
+      border: 1px solid rgba(255,255,255,.08);
+    }
+
+    .modern-composer input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text);
+      font-size: 14px;
+      padding: 10px 2px;
+    }
+
+    .modern-composer input::placeholder {
+      color: #8fa8cb;
+    }
+
+    .attach-btn,
+    .send-modern {
+      width: 46px;
+      height: 46px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.08);
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      font-size: 20px;
+      color: white;
+      padding: 0;
+    }
+
+    .attach-btn {
+      background: rgba(255,255,255,.05);
+    }
+
+    .send-modern {
+      background: linear-gradient(135deg, #5ea0ff, #7f5cff);
+      box-shadow: 0 12px 24px rgba(94,160,255,.25);
+    }
+
+    @media (max-width: 430px) {
+      .grid,
+      .row,
+      .mini-grid,
+      .actions,
+      .toolbar {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .hero h2 { font-size: 24px; }
+      .badge { display: none; }
+
+      .chat-shell {
+        min-height: 72vh;
+      }
+
+      .msg {
+        max-width: 92%;
+      }
+
+      .chat-head {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .grid,
+      .row,
+      .mini-grid,
+      .tabs,
+      .actions,
+      .toolbar {
+        grid-template-columns: 1fr;
+      }
+
+      .modern-composer {
+        gap: 8px;
+      }
+
+      .attach-btn,
+      .send-modern {
+        width: 42px;
+        height: 42px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="topbar glass">
+      <div class="brand">
+        <div class="logo">TA</div>
+        <div>
+          <h1>Touhid AI</h1>
+          <p>Smart OCR • AI Chat • App Server • Live Info</p>
+        </div>
+      </div>
+      <div class="badge">No Login Mode</div>
+    </div>
+
+    <section class="hero glass">
+      <div class="hero-top">
+        <div>
+          <div class="hero-pill">Pro Web App Demo</div>
+          <h2>Touhid AI</h2>
+          <p>
+            OCR, MCQ solve, AI chat, PDF tools, smart server routing আর live info — সবকিছু আরও পরিষ্কার, দ্রুত আর ব্যবহারবান্ধবভাবে সাজানো হয়েছে।
+          </p>
+        </div>
+      </div>
+      <div class="credit">✨ Built by Touhidul Alam Nabil</div>
+    </section>
+
+    <section class="grid">
+      <div class="card glass">
+        <div class="icon">🖼️</div>
+        <h3>প্রশ্নের ছবি দাও</h3>
+        <p>কোন প্রশ্নের solution জানতে প্রশ্নের ছবি দাও, তারপর লেখা বের করে সমাধান দেখো।</p>
+      </div>
+      <div class="card glass">
+        <div class="icon">🤖</div>
+        <h3>AI Chat</h3>
+        <p>আলাদা premium chat section, modern bubble UI আর quick prompt support।</p>
+      </div>
+      <div class="card glass">
+        <div class="icon">📘</div>
+        <h3>PDF & Notes</h3>
+        <p>PDF file select, future parse support, summary prompt ready।</p>
+      </div>
+      <div class="card glass">
+        <div class="icon">☁️</div>
+        <h3>Server Ready</h3>
+        <p>API URL, OCR endpoint, web mode toggle, answer routing config।</p>
+      </div>
+    </section>
+
+    <section class="section glass">
+      <div class="section-title">
+        <h3>Main Tools</h3>
+        <span class="pulse"><span class="dot"></span>Prototype Ready</span>
+      </div>
+
+      <div class="tabs">
+        <button class="tab-btn active" type="button" data-tab="ocr">প্রশ্নের ছবি দাও</button>
+        <button class="tab-btn" type="button" data-tab="mcq">MCQ</button>
+        <button class="tab-btn" type="button" data-tab="server">Server</button>
+      </div>
+
+      <div id="ocr" class="panel active">
+        <div class="upload-box">
+          <div style="font-size:34px;">📤</div>
+          <strong>কোন প্রশ্নের solution জানতে প্রশ্নের ছবি দাও</strong>
+          <p>Gallery থেকে প্রশ্নের ছবি select করো। এরপর ছবি থেকে লেখা বের করে solution দেখানো হবে।</p>
+          <div class="actions two" style="margin-top:14px;">
+            <label class="file-label" for="imageInput">Image Choose</label>
+            <button class="ghost" type="button" onclick="simulateOCR()">Run OCR</button>
+          </div>
+          <input id="imageInput" type="file" accept="image/*" />
+        </div>
+
+        <div class="status" id="ocrStatus">
+          <h4>প্রশ্ন স্ক্যান স্ট্যাটাস</h4>
+          <p>এখনও কোনো image select করা হয়নি।</p>
+        </div>
+
+        <div id="imagePreview" class="preview">
+          <img id="previewImg" alt="preview" />
+          <div class="meta">
+            <h4 id="previewName">No file selected</h4>
+            <p id="previewInfo">এখানে image preview, size আর type দেখাবে।</p>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label>স্ক্যান ধরণ</label>
+            <select id="ocrMode">
+              <option>Bangla Priority</option>
+              <option>Bangla + English</option>
+              <option>High Accuracy</option>
+              <option>Fast Scan</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Image Clean</label>
+            <select id="cleanMode">
+              <option>Auto Enhance</option>
+              <option>Sharpen Text</option>
+              <option>Black & White</option>
+              <option>High Contrast</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="result">
+          <h4>প্রশ্ন থেকে বের হওয়া লেখা</h4>
+          <textarea id="ocrOutput" placeholder="এখানে প্রশ্নের লেখা আসবে..."></textarea>
+          <div class="actions">
+            <button type="button" onclick="cleanText()">লেখা ঠিক করো</button>
+            <button class="success" type="button" onclick="copyText('ocrOutput', this)">Copy</button>
+            <button class="warn" type="button" onclick="sendToChatFromOCR()">Solution দেখো</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="mcq" class="panel">
+        <div class="field">
+          <label>MCQ Question</label>
+          <textarea id="mcqInput" placeholder="প্রশ্ন ও option লিখো, যেমন:
+১। বাংলাদেশের রাজধানী কোনটি?
+A. চট্টগ্রাম
+B. ঢাকা
+C. খুলনা
+D. রাজশাহী"></textarea>
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label>Answer Style</label>
+            <select id="answerStyle">
+              <option>Short Explanation</option>
+              <option>Detailed Explanation</option>
+              <option>Exam Friendly</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Subject Hint</label>
+            <select id="subjectHint">
+              <option>Auto Detect</option>
+              <option>General Knowledge</option>
+              <option>Science</option>
+              <option>Bangla</option>
+              <option>English</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="actions two">
+          <button type="button" onclick="solveMCQ()">Solve Now</button>
+          <button class="ghost" type="button" onclick="useOCRinMCQ()">Use OCR Text</button>
+        </div>
+
+        <div class="result">
+          <h4>MCQ Answer</h4>
+          <textarea id="mcqOutput" placeholder="এখানে answer ও explanation আসবে..."></textarea>
+          <div class="actions two">
+            <button class="success" type="button" onclick="copyText('mcqOutput', this)">Copy</button>
+            <button class="warn" type="button" onclick="sendToChatFromMCQ()">Ask AI More</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="server" class="panel">
+        <div class="mini-grid">
+          <div class="kpi">
+            <b>2</b>
+            <span>Server Route<br/>AI + App Data</span>
+          </div>
+          <div class="kpi">
+            <b>3</b>
+            <span>Answer Source<br/>App + AI + Web</span>
+          </div>
+        </div>
+
+        <div class="config">
+          <h4>Server Configuration</h4>
+          <p>এগুলো demo input. পরে real backend connect করলে এখান থেকে app server, OCR API আর AI API control করা যাবে।</p>
+        </div>
+
+        <div class="field">
+          <label>AI API URL</label>
+          <input id="apiUrl" type="url" placeholder="https://your-ai-api.com/chat" />
+        </div>
+        <div class="field">
+          <label>OCR API URL</label>
+          <input id="ocrUrl" type="url" placeholder="https://your-server.com/ocr" />
+        </div>
+        <div class="field">
+          <label>App Data Server URL</label>
+          <input id="appServerUrl" type="url" placeholder="https://your-server.com/storage" />
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label>Answer Routing</label>
+            <select id="routeMode">
+              <option>Smart Auto</option>
+              <option>App Server First</option>
+              <option>AI Direct</option>
+              <option>Web Update First</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Live Web Info</label>
+            <select id="webMode">
+              <option>Enabled</option>
+              <option>Disabled</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="actions two">
+          <button type="button" onclick="saveConfig()">Save Config</button>
+          <button class="ghost" type="button" onclick="loadDemoConfig()">Load Demo</button>
+        </div>
+
+        <div class="status" id="configStatus">
+          <h4>System Status</h4>
+          <p>এখন demo mode এ আছে। Real server connect করলে OCR, AI answer, PDF parse আর live update কাজ করবে।</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section glass chat-section">
+      <div class="section-title">
+        <h3>AI Chat</h3>
+        <span>Separate Premium Section</span>
+      </div>
+
+      <div class="chat-shell">
+        <div class="chat-head">
+          <div class="chat-head-left">
+            <div class="chat-ai-logo">AI</div>
+            <div>
+              <h3>Touhid AI Chat</h3>
+              <p>Smart answers • OCR help • MCQ solve • Live info</p>
+            </div>
+          </div>
+          <div class="chat-head-badge">Online</div>
+        </div>
+
+        <div class="chat-suggestions">
+          <button type="button" onclick="quickPrompt('এই ছবির বাংলা লেখা পড়ে explain করো')">Image Explain</button>
+          <button type="button" onclick="quickPrompt('এই MCQ solve করে reason দাও')">Solve MCQ</button>
+          <button type="button" onclick="quickPrompt('আজকের update info দাও')">Live Info</button>
+          <button type="button" onclick="quickPrompt('এই PDF summary করে দাও')">PDF Summary</button>
+        </div>
+
+        <div class="chat-window" id="messages">
+          <div class="welcome-wrap">
+            <div class="welcome-icon">✨</div>
+            <h4>আসসালামু আলাইকুম 👋</h4>
+            <p>আমি Touhid AI. তুমি এখানে OCR, MCQ, PDF help আর live info নিয়ে chat করতে পারবে।</p>
+          </div>
+
+          <div class="msg-row ai-row">
+            <div class="bubble-icon">AI</div>
+            <div class="msg ai">আমি ready আছি। প্রশ্ন লিখো, অথবা উপরের quick prompt use করো।</div>
+          </div>
+        </div>
+
+        <div class="chat-bottom">
+          <div class="chat-tools">
+            <button type="button" onclick="quickPrompt('এই ছবির বাংলা লেখা explain করো')">OCR Help</button>
+            <button type="button" onclick="quickPrompt('এই MCQ solve করে reason দাও')">MCQ Help</button>
+            <button type="button" onclick="quickPrompt('আজকের update info দাও')">Live Info</button>
+            <button type="button" onclick="quickPrompt('এই PDF summary করে দাও')">PDF Help</button>
+          </div>
+
+          <div class="modern-composer">
+            <button class="attach-btn" type="button" onclick="scrollToTools()">＋</button>
+            <input id="promptInput" type="text" placeholder="এখানে তোমার প্রশ্ন লিখো..." />
+            <button class="send-modern" type="button" onclick="sendMessage()">➤</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section glass">
+      <div class="section-title">
+        <h3>Extra Tools</h3>
+        <span>Added as requested</span>
+      </div>
+
+      <div class="actions two">
+        <label class="file-label secondary" for="pdfInput">Choose PDF</label>
+        <button class="ghost" type="button" onclick="summarizePDF()">PDF Summary Prompt</button>
+      </div>
+      <input id="pdfInput" type="file" accept="application/pdf" />
+
+      <div class="status" id="pdfStatus">
+        <h4>PDF Module</h4>
+        <p>এখনও কোনো PDF select করা হয়নি।</p>
+      </div>
+    </section>
+
+    <p class="footer-note">
+      Login ও history intentionally বাদ রাখা হয়েছে যাতে app সহজ, দ্রুত আর lightweight থাকে। UI আরও clean করা হয়েছে, chat আলাদা করা হয়েছে, copy flow improve করা হয়েছে, empty-state message যোগ করা হয়েছে, আর hosting-ready demo হিসেবে polish করা হয়েছে।
+    </p>
+  </div>
+
+  <script>
+    const tabs = document.querySelectorAll('.tab-btn');
+    const panels = document.querySelectorAll('.panel');
+    const messages = document.getElementById('messages');
+    const promptInput = document.getElementById('promptInput');
+    const imageInput = document.getElementById('imageInput');
+    const pdfInput = document.getElementById('pdfInput');
+    const imagePreview = document.getElementById('imagePreview');
+    const previewImg = document.getElementById('previewImg');
+    const previewName = document.getElementById('previewName');
+    const previewInfo = document.getElementById('previewInfo');
+
+    tabs.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabs.forEach(b => b.classList.remove('active'));
+        panels.forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.tab).classList.add('active');
+      });
+    });
+
+    imageInput.addEventListener('change', handleImagePreview);
+    pdfInput.addEventListener('change', handlePDFPreview);
+
+    function handleImagePreview(e) {
+      const file = e.target.files && e.target.files[0];
+      const status = document.getElementById('ocrStatus');
+
+      if (!file) {
+        imagePreview.classList.remove('active');
+        status.innerHTML = '<h4>প্রশ্ন স্ক্যান স্ট্যাটাস</h4><p>এখনও কোনো image select করা হয়নি।</p>';
+        return;
+      }
+
+      status.innerHTML = `<h4>প্রশ্ন স্ক্যান স্ট্যাটাস</h4><p><strong>${escapeHtml(file.name)}</strong><br>${formatBytes(file.size)} • ${escapeHtml(file.type || 'image/*')}<br>Image ready. এখন solution বের করার জন্য scan চালানো যাবে।</p>`;
+
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        previewImg.src = evt.target.result;
+        previewName.textContent = file.name;
+        previewInfo.textContent = `${formatBytes(file.size)} • ${file.type || 'image/*'}`;
+        imagePreview.classList.add('active');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function handlePDFPreview(e) {
+      const file = e.target.files && e.target.files[0];
+      const box = document.getElementById('pdfStatus');
+
+      if (!file) {
+        box.innerHTML = '<h4>PDF Module</h4><p>এখনও কোনো PDF select করা হয়নি।</p>';
+        return;
+      }
+
+      box.innerHTML = `
+        <h4>PDF Module</h4>
+        <p><strong>${escapeHtml(file.name)}</strong><br>${formatBytes(file.size)} • ${escapeHtml(file.type || 'application/pdf')}<br>PDF selected successfully. পরে parser/API connect করলে summary, extract, question-answer সম্ভব হবে।</p>
+      `;
+    }
+
+    function simulateOCR() {
+      const output = document.getElementById('ocrOutput');
+      const status = document.getElementById('ocrStatus');
+      const hasImage = imageInput.files && imageInput.files[0];
+      const mode = document.getElementById('ocrMode').value;
+      const clean = document.getElementById('cleanMode').value;
+
+      if (!hasImage) {
+        output.value = 'প্রথমে একটা image select করো। তারপর OCR run করো।';
+        status.innerHTML = '<h4>প্রশ্ন স্ক্যান স্ট্যাটাস</h4><p>OCR চালাতে আগে image select করতে হবে।</p>';
+        return;
+      }
+
+      status.innerHTML = `<h4>প্রশ্ন স্ক্যান স্ট্যাটাস</h4><p>OCR demo complete.<br>Mode: ${escapeHtml(mode)}<br>Image clean: ${escapeHtml(clean)}</p>`;
+      output.value = `OCR demo result
+
+Mode: ${mode}
+Image clean: ${clean}
+
+এখানে বাংলায় extract করা text দেখাবে।
+Real OCR API connect করলে uploaded image server এ যাবে, preprocess হবে, তারপর text বের হবে।`;
+    }
+
+    function cleanText() {
+      const output = document.getElementById('ocrOutput');
+      let text = output.value.trim();
+
+      if (!text) {
+        output.value = 'পরিষ্কার করার মতো text নেই। আগে OCR result আনো।';
+        return;
+      }
+
+      text = text
+        .replace(/\s{2,}/g, ' ')
+        .replace(/\n{3,}/g, '\n\n')
+        .trim();
+
+      output.value = `Cleaned Text\n\n${text}`;
+    }
+
+    function solveMCQ() {
+      const input = document.getElementById('mcqInput').value.trim();
+      const output = document.getElementById('mcqOutput');
+      const style = document.getElementById('answerStyle').value;
+      const subject = document.getElementById('subjectHint').value;
+
+      if (!input) {
+        output.value = 'প্রথমে MCQ question দাও।';
+        return;
+      }
+
+      const lower = input.toLowerCase();
+      let sampleAnswer = 'সম্ভাব্য সঠিক উত্তর analyse করতে AI model question, option আর context use করবে।';
+
+      if (lower.includes('রাজধানী') && lower.includes('বাংলাদেশ')) {
+        sampleAnswer = `সম্ভাব্য সঠিক উত্তর: B. ঢাকা
+কারণ বাংলাদেশের রাজধানী ঢাকা।`;
+      }
+
+      output.value = `MCQ Analysis (${style})
+Subject: ${subject}
+
+Detected question:
+${input}
+
+${sampleAnswer}
+
+Explanation:
+Real AI API connect করলে এখানে exact answer, reason আর shortcut explanation দেখাবে।`;
+    }
+
+    function useOCRinMCQ() {
+      const ocrText = document.getElementById('ocrOutput').value.trim();
+      const mcqInput = document.getElementById('mcqInput');
+
+      if (!ocrText) {
+        mcqInput.value = 'আগে ছবির লেখা বের করো, তারপর এখানে auto-fill হবে।';
+        return;
+      }
+
+      mcqInput.value = ocrText;
+    }
+
+    function quickPrompt(text) {
+      promptInput.value = text;
+      promptInput.focus();
+    }
+
+    function addMessage(text, type) {
+      const row = document.createElement('div');
+      row.className = `msg-row ${type === 'user' ? 'user-row' : 'ai-row'}`;
+
+      if (type !== 'user') {
+        const icon = document.createElement('div');
+        icon.className = 'bubble-icon';
+        icon.textContent = 'AI';
+        row.appendChild(icon);
+      }
+
+      const bubble = document.createElement('div');
+      bubble.className = `msg ${type}`;
+      bubble.textContent = text;
+
+      row.appendChild(bubble);
+      messages.appendChild(row);
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    function showTyping() {
+      const row = document.createElement('div');
+      row.className = 'msg-row ai-row';
+      row.id = 'typingRow';
+
+      const icon = document.createElement('div');
+      icon.className = 'bubble-icon';
+      icon.textContent = 'AI';
+
+      const bubble = document.createElement('div');
+      bubble.className = 'msg ai';
+      bubble.innerHTML = `
+        <div class="typing">
+          <span></span><span></span><span></span>
+        </div>
+      `;
+
+      row.appendChild(icon);
+      row.appendChild(bubble);
+      messages.appendChild(row);
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    function hideTyping() {
+      const typingRow = document.getElementById('typingRow');
+      if (typingRow) typingRow.remove();
+    }
+
+    function sendMessage() {
+      const value = promptInput.value.trim();
+      if (!value) return;
+
+      addMessage(value, 'user');
+      promptInput.value = '';
+      showTyping();
+
+      setTimeout(() => {
+        hideTyping();
+        addMessage(getReply(value), 'ai');
+      }, 650);
+    }
+
+    function getReply(text) {
+      const t = text.toLowerCase();
+
+      if (t.includes('ocr') || t.includes('লেখা') || t.includes('ছবি')) {
+        return 'বাংলা OCR mode ready. Image upload হলে app server এ save, preprocess, OCR extract, text clean আর AI explain flow এ কাজ করবে।';
+      }
+
+      if (t.includes('mcq') || t.includes('solve') || t.includes('answer')) {
+        return 'MCQ solver ready. Question detect, option analyse, possible answer, explanation আর exam-friendly summary দেওয়া যাবে।';
+      }
+
+      if (t.includes('pdf')) {
+        return 'PDF module currently demo mode এ আছে। পরে parser connect করলে PDF text extract, summary আর question-answer করা যাবে।';
+      }
+
+      if (t.includes('today') || t.includes('আজকের') || t.includes('update') || t.includes('current') || t.includes('live')) {
+        return 'Live info mode এ AI web source use করে updated answer দিবে। এই অংশটা real backend connect করলে পুরো কাজ করবে।';
+      }
+
+      return 'তোমার প্রশ্ন detect করা হয়েছে। Smart routing mode এ app server, AI server আর live web info থেকে best উত্তর আনা যাবে।';
+    }
+
+    function sendToChatFromOCR() {
+      const ocrText = document.getElementById('ocrOutput').value.trim();
+      if (!ocrText) return;
+
+      promptInput.value = `এই প্রশ্নের লেখা explain করে solution দাও:
+${ocrText}`;
+      promptInput.focus();
+      scrollToChat();
+    }
+
+    function sendToChatFromMCQ() {
+      const mcqText = document.getElementById('mcqOutput').value.trim();
+      if (!mcqText) return;
+
+      promptInput.value = `এই MCQ answer আরেকটু explain করো:
+${mcqText}`;
+      promptInput.focus();
+      scrollToChat();
+    }
+
+    function summarizePDF() {
+      const file = pdfInput.files && pdfInput.files[0];
+
+      if (!file) {
+        promptInput.value = 'এই PDF summary করে দাও';
+      } else {
+        promptInput.value = `${file.name} PDF এর summary আর main point দাও`;
+      }
+
+      promptInput.focus();
+      scrollToChat();
+    }
+
+    function saveConfig() {
+      const status = document.getElementById('configStatus');
+      const api = document.getElementById('apiUrl').value.trim() || 'Not set';
+      const ocr = document.getElementById('ocrUrl').value.trim() || 'Not set';
+      const appServer = document.getElementById('appServerUrl').value.trim() || 'Not set';
+      const route = document.getElementById('routeMode').value;
+      const web = document.getElementById('webMode').value;
+
+      status.innerHTML = `
+        <h4>System Status</h4>
+        <p>Configuration saved in demo mode.<br><br>
+        AI API: ${escapeHtml(api)}<br>
+        OCR API: ${escapeHtml(ocr)}<br>
+        App Server: ${escapeHtml(appServer)}<br>
+        Route: ${escapeHtml(route)}<br>
+        Web Update: ${escapeHtml(web)}</p>
+      `;
+    }
+
+    function loadDemoConfig() {
+      document.getElementById('apiUrl').value = 'https://demo-ai.example.com/chat';
+      document.getElementById('ocrUrl').value = 'https://demo-server.example.com/ocr';
+      document.getElementById('appServerUrl').value = 'https://demo-server.example.com/storage';
+      document.getElementById('routeMode').value = 'Smart Auto';
+      document.getElementById('webMode').value = 'Enabled';
+      saveConfig();
+    }
+
+    function copyText(id, btn) {
+      const el = document.getElementById(id);
+      if (!el || !el.value.trim()) return;
+
+      const onSuccess = () => {
+        if (!btn) return;
+        const oldText = btn.textContent;
+        btn.textContent = 'Copied';
+        setTimeout(() => {
+          btn.textContent = oldText;
+        }, 900);
+      };
+
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(el.value).then(onSuccess).catch(() => fallbackCopy(el, onSuccess));
+      } else {
+        fallbackCopy(el, onSuccess);
+      }
+    }
+
+    function fallbackCopy(el, cb) {
+      el.focus();
+      el.select();
+      el.setSelectionRange(0, 99999);
+
+      try {
+        document.execCommand('copy');
+        cb();
+      } catch (e) {
+        alert('Copy কাজ করেনি। browser permission লাগতে পারে।');
+      }
+    }
+
+    function scrollToChat() {
+      const chat = document.querySelector('.chat-section');
+      if (!chat) return;
+      chat.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function scrollToTools() {
+      const tools = document.querySelector('.section.glass');
+      if (!tools) return;
+      tools.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function formatBytes(bytes) {
+      if (bytes === 0) return '0 Bytes';
+      const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(1024));
+      return parseFloat((bytes / Math.pow(1024, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    promptInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+
+    loadDemoConfig();
+  </script>
+</body>
+</html>
